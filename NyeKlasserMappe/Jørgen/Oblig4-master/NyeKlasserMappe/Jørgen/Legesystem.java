@@ -10,7 +10,7 @@ class Legesystem{
     Lenkeliste<Resept> resepterListe = new Lenkeliste<Resept>();
     Lenkeliste<Lege> legeListe = new SortertLenkeliste<Lege>();
 
-    public Legesystem(String filnavn) throws FileNotFoundException{
+    public Legesystem(String filnavn) throws FileNotFoundException, UlovligUtskrift{
         this.filnavn = filnavn;
 
         File fil = new File(filnavn);
@@ -20,109 +20,189 @@ class Legesystem{
         String seksjon3leger = seksjonScanner.next();
         String seksjon4resepter = seksjonScanner.next();
 
-        // Håndtere seksjon1
-        while(seksjon1pasienter.hasNextLine()){
-          Scanner seksjon1Scanner = new Scanner(seksjon1pasienter).useDelimiter("\\s*,\\s*");
-          while(seksjon1Scanner.hasNextLine()){
-            String linje = seksjon1Scanner.nextLine();
-            while(linje.hasNext())
+        // Håndtere seksjon1: Pasienter
+        Scanner scan1 = new Scanner(seksjon1pasienter);
+        scan1.nextLine();
+        while(scan1.hasNextLine()){
+          String linje = scan1.nextLine();
+          Scanner linjeScanner = new Scanner(linje).useDelimiter("\\s*,\\s*");
+          ArrayList<String> linjeOrd = new ArrayList<String>();
+          while(linjeScanner.hasNext()){
+            linjeOrd.add(linjeScanner.next()); // index 0=navn, 1=fnr
+          }
+          Pasient nyPasient = new Pasient(linjeOrd.get(0), linjeOrd.get(1));
+          pasientListe.leggTil(nyPasient);
+        }
+
+        // Håndtere Seksjon2: Legemidler
+        Scanner scan2 = new Scanner(seksjon2legemidler);
+        scan2.nextLine();
+        while(scan2.hasNextLine()){
+          String linje = scan2.nextLine();
+          Scanner linjeScanner = new Scanner(linje).useDelimiter("\\s*,\\s*");
+          ArrayList<String> linjeOrd = new ArrayList<String>();
+
+
+          while(linjeScanner.hasNext()){
+            linjeOrd.add(linjeScanner.next()); // index 0=navn, 1=fnr
+          }
+          if (linjeOrd.size()>5){
+              System.out.println("Ugyldig Linje");
+          }else{
+                try{
+                  Double pris = Double.parseDouble(linjeOrd.get(2));
+                  Double virkestoff = Double.parseDouble(linjeOrd.get(3));
+
+
+              String navn = linjeOrd.get(0);
+
+              if(linjeOrd.get(1).equals("vanlig")){
+                  Legemiddel nyttLegemiddel = new Vanlig(navn, pris, virkestoff);
+                  legemiddelListe.leggTil(nyttLegemiddel);
+              }
+              else if(linjeOrd.get(1).equals("narkotisk")){
+                  int styrke = Integer.parseInt(linjeOrd.get(4));
+                  Legemiddel nyttLegemiddel = new Narkotisk(navn, pris, virkestoff, styrke);
+                  legemiddelListe.leggTil(nyttLegemiddel);
+              }
+              else if(linjeOrd.get(1).equals("vanedannende")){
+
+                  int styrke = Integer.parseInt(linjeOrd.get(4));
+                  Legemiddel nyttLegemiddel = new Vanedannende(navn, pris, virkestoff, styrke);
+                  legemiddelListe.leggTil(nyttLegemiddel);
+              }
+          }catch(Exception e){
+          System.out.println("Det går ikke");
+           }
           }
         }
 
-        }
-
-        int teller = 0;
-        while(scanner.hasNextLine()){
-            if(scanner.next().equals("#")){
-                System.out.println("#");
-                scanner.nextLine();
-                teller ++;
-            }
+        // Håndtere Seksjon3: Leger
+        Scanner scan3 = new Scanner(seksjon3leger);
+        scan3.nextLine();
+        while(scan3.hasNextLine()){
+          String linje = scan3.nextLine();
+          Scanner linjeScanner = new Scanner(linje).useDelimiter("\\s*,\\s*");
+          ArrayList<String> linjeOrd = new ArrayList<String>();
 
 
-            /*
-            FIL
-              Seksjoner delt med # .next()useDelimiter((""\\s*#\\s*""))
-                Deles inn i linjer med nextLine()
-                  Deles inn i parametre med .next().useDelimiter(komma)
-                  legges inn i en ArrayList.
-                  ArrayListnavn.get(index)
-
-
-            Scanner scanner = new Scanner(fil).useDelimiter("\\s*#\\s*");
-            String seksjon = scanner.next();
-
-            String streng = scanner.next();
-            while (streng.hasNextLine()){
-              Scanner linje = New Scanner(streng).useDelimiter("\\s*,\\s*");
-              while(linje.hasNext()){
-
-
-            }
-
+          while(linjeScanner.hasNext()){
+            linjeOrd.add(linjeScanner.next()); // index 0=navn, 1= (0= vanlig lege, else = spesialist)
           }
-            System.out.println(scanner.next());
-
-
-
-
-            */
-            String linje = seksjonScanner.nextLine();
-            Scanner linjeScanner = new Scanner(linje).useDelimiter("\\s*#\\s*")); //Deler opp neste linje til en liste
-
-            if (teller == 1){//
-                Pasient nyPasient = new Pasient(liste[0], liste[1]);
-                System.out.println(nyPasient);
-                pasientListe.leggTil(nyPasient);
-
-            } else if(teller == 2){//legemiddel
-
-                if (liste[1].equals("narkotisk")){
-                    Double pris = Double.parseDouble(liste[2]);
-                    Double virkestoff = Double.parseDouble(liste[3]);
-                    Integer styrke = Integer.parseInt(liste[4]);
-                    Legemiddel nyttLegemiddel = new Narkotisk(liste[0], pris, virkestoff, styrke);
-                    System.out.println(nyttLegemiddel);
-                    legemiddelListe.leggTil(nyttLegemiddel);
-                }
-                else if (liste[1].equals("vanedannende")){
-                    Double pris = Double.parseDouble(liste[2]);
-                    Double virkestoff = Double.parseDouble(liste[3]);
-                    Integer styrke = Integer.parseInt(liste[4]);
-                    Legemiddel nyttLegemiddel = new Vanedannende(liste[0],  pris, virkestoff, styrke);
-                    System.out.println(nyttLegemiddel);
-                    legemiddelListe.leggTil(nyttLegemiddel);
-                }
-
-                else if (liste[1].equals("vanlig")){
-                    Double pris = Double.parseDouble(liste[2]);
-                    Double virkestoff = Double.parseDouble(liste[3]);
-                    Legemiddel nyttLegemiddel = new Vanlig(liste[0],  pris, virkestoff);
-                    System.out.println(nyttLegemiddel);
-                    legemiddelListe.leggTil(nyttLegemiddel);
-                }
-
-            } else if (teller == 3){//lege
-                Integer type = Integer.parseInt(liste[1]);
-                Lege nyLege;
-                if (type > 0){
-                    nyLege = new Spesialist(liste[0], type);
-                } else {
-                    nyLege = new Lege(liste[0]);
-                }
-                System.out.println(nyLege);
+          if (linjeOrd.size()>2){
+              System.out.println("Ugyldig Linje");
+          }else{
+            try{
+              String navn = linjeOrd.get(0);
+              int kontrollid = Integer.parseInt(linjeOrd.get(1));
+              if (kontrollid==0){
+                Lege nyLege = new Lege(navn);
                 legeListe.leggTil(nyLege);
-            } else {//resepter
-                //Resepter (legemiddelNummer,legeNavn,pasientID,type,[reit]) <--- sånn det står i myeInndata.txt
+              }else{
+                Lege nySpesialist = new Spesialist(navn, kontrollid);
+                legeListe.leggTil(nySpesialist);
+              }
+          }catch(Exception e){
+              System.out.println("Det går ikke");
+           }
+          }
+       }
+       Scanner scan4 = new Scanner(seksjon4resepter);
+       scan4.nextLine();
+       while(scan4.hasNextLine()){
+         String linje = scan4.nextLine();
+         Scanner linjeScanner = new Scanner(linje).useDelimiter("\\s*,\\s*");
+         ArrayList<String> linjeOrd = new ArrayList<String>();
 
-            }
-        }
+
+         int lm = 0;
+         int l = 0;
+         int p = 0;
+         int r = 0;
+        // Legemiddel legemiddel;
+        // Lege lege;
+        // Pasient pasient;
+        // int reit;
+
+         while(linjeScanner.hasNext()){
+           linjeOrd.add(linjeScanner.next()); // index 0=navn, 1= (0= vanlig lege, else = spesialist)
+         }
+
+
+           int legemiddelNummer = Integer.parseInt(linjeOrd.get(0));
+           String legeNavn = linjeOrd.get(1);
+           int pasientId = Integer.parseInt(linjeOrd.get(2));
+           String reseptType = linjeOrd.get(3);
+
+           for(int i=0;i<legemiddelListe.stoerrelse();i++){
+               if(legemiddelListe.hent(i).hentId() == legemiddelNummer){
+                   lm = i; //legemiddelListe.hent(i);
+               }
+             }
+              for(int i=0;i<legeListe.stoerrelse();i++){
+                  if(legeListe.hent(i).hentNavn().equals(legeNavn)){
+                      l = i;
+                  }
+                }
+            for(int i=0;i<pasientListe.stoerrelse();i++){
+                if(pasientListe.hent(i).hentId() == pasientId){
+                    p = i;
+                }
+              }
+
+
+          // for(Legemiddel l : legemiddelListe){
+          //     Legemiddel legemiddel;
+          //     if(l.hentId() == legemiddelNummer){
+          //       legemiddel = l;
+          //     }
+
+
+          if(reseptType.equals("blaa")){
+            int reseptReit = Integer.parseInt(linjeOrd.get(4));
+              try{
+                  legeListe.hent(l).skrivBlaaResept(legemiddelListe.hent(lm), pasientListe.hent(p), reseptReit);
+              }catch(UlovligUtskrift e){}
+
+            }else if(reseptType.equals("militaer")){
+              int reseptReit = Integer.parseInt(linjeOrd.get(4));
+            try{
+                legeListe.hent(l).skrivMilitaerResept(legemiddelListe.hent(lm), pasientListe.hent(p), reseptReit);
+            }catch(UlovligUtskrift e){}
+
+          }else if(reseptType.equals("hvit")){
+            int reseptReit = Integer.parseInt(linjeOrd.get(4));
+            try{
+                legeListe.hent(l).skrivHvitResept(legemiddelListe.hent(lm), pasientListe.hent(p), reseptReit);
+            }catch(UlovligUtskrift e){}
+
+          }else if(reseptType.equals("p")){
+            try{
+                legeListe.hent(l).skrivPResept(legemiddelListe.hent(lm), pasientListe.hent(p));
+            }catch(UlovligUtskrift e){}
+          }
       }
+    }
 }
 
-
 class Test{
-    public static void main(String[] args) throws FileNotFoundException{
-        Legesystem les = new Legesystem("myeInndata.txt");
+    public static void main(String[] args) throws FileNotFoundException, UlovligUtskrift{
+        Legesystem les = new Legesystem("testfil.txt");
+        //Test Pasientseksjon
+        for(Pasient p : les.pasientListe){
+            System.out.println(p.fodselsnummer);
+        }
+        //Test Legemiddelseksjon
+        for(Legemiddel l : les.legemiddelListe){
+            System.out.println(l.navn);
+        }
+        //Test Legeseksjonen
+        for(Lege leg : les.legeListe){
+            System.out.println(leg);
+        }
+        //Test Reseptseksjon
+        for(Lege leg : les.legeListe){
+            leg.hentReseptListe();
+        }
     }
 }
