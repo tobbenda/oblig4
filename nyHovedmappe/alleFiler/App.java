@@ -95,7 +95,7 @@ class App{
     //PASIENT
     }else if(oppretteValg==4){;}  //metode eller kode for å opprette pasient
 
-  } // Slutten på metoden for innvalget "OPPRETT"
+  } // Slutten på metoden for innvalget "OPPRETT"    
 
 
   // METODE FOR Å BRUKE RESEPT:
