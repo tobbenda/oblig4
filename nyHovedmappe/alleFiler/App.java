@@ -36,8 +36,6 @@ class App{
             oppretteValg = oppretterScanner.nextInt();  //Sjekker etter int fra bruker.
             if(oppretteValg<1||oppretteValg>4){
                System.out.println("\nUgyldig input! Prøv igjen\n");
-              }else{
-                 System.out.println("Går videre....");
               }
             }catch(InputMismatchException e){
                System.out.println("\nUgyldig input! Prøv igjen.");
@@ -46,30 +44,14 @@ class App{
         }
 
 
-    // LEGE
-    if(oppretteValg==1){ //metode eller kode for å opprette lege
-        System.out.print("\nVennligst skriv navn på legen du vil opprette.\n>");
-        Scanner nyLegeScanner = new Scanner(System.in);
 
-        String nyLegeNavn = nyLegeScanner.next();
-        System.out.print("\nVennligst oppgi legens kontrollID.\n>");
-        try{
-            int kontrollId = nyLegeScanner.nextInt();
-            if(kontrollId != 0){
-                Spesialist nySpesialist = new Spesialist(nyLegeNavn, kontrollId);
-                //Legeliste.leggTil(nySpesialist);
-            }else{
-                Lege nyLege = new Lege(nyLegeNavn);
-                //Legeliste.leggTil(nylege);
-            }
-        }catch(InputMismatchException e){
-            System.out.println("\nUgyldig input! KontrollID må være et heltall.\n");
-            System.out.println("Vennligst oppgi legens kontrollID.\n>");
-            }
+    if(oppretteValg==1){ //metode for å opprette lege
+        opprettNyLege();
+    }
+    else if(oppretteValg==2){ //metode for å opprette legemiddel
+        opprettNyttLegemiddel();
 
-    // LEGEMIDDEL
-    }else if(oppretteValg==2){; //metode eller kode for å opprette legemiddel
-    //RESEPT
+
     }else if(oppretteValg==3){; //metode eller kode for å opprette resept
       Scanner typeReseptScanner = new Scanner(System.in);
       int typeReseptValg=0;
@@ -84,6 +66,7 @@ class App{
           System.out.println("\n\nUgyldig input! Prøv igjen\n");
         }
       }
+
       //HVIT RESEPT
       if(typeReseptValg==1){;} //Metode eller kode for å opprette hvit resept
       //BLÅ RESEPT
@@ -95,7 +78,7 @@ class App{
     //PASIENT
     }else if(oppretteValg==4){;}  //metode eller kode for å opprette pasient
 
-  } // Slutten på metoden for innvalget "OPPRETT"    
+  } // Slutten på metoden for innvalget "OPPRETT"
 
 
   // METODE FOR Å BRUKE RESEPT:
@@ -128,5 +111,131 @@ class App{
       }
     }
     return 0;
+  }
+
+
+
+  private static void opprettNyttLegemiddel(){  //Metode for å legge til legemiddel.
+      System.out.print("\nVennligst skriv hvilken type legemiddel du vil opprette.\n>");
+      String type = navnSjekk();  //Sjekker om bruker oppgir gyldig input.
+      int styrke = 0;
+      boolean finsTypen = typeLegemiddelSjekk(type);  //Sjekker at typen oppgitt er en legemiddeltype.
+      while(finsTypen != true){
+          System.out.print("\nUgyldig type oppgitt! Typene kan være vanedannende, vanlig eller narkotisk.\n");
+          System.out.print("\nVennligst skriv hvilken type legemiddel du vil opprette.\n>");
+          type = navnSjekk();
+          finsTypen = typeLegemiddelSjekk(type);  //Sjekker brukers nye input.
+      }
+      if(type.equals("vanlig")){  //Hopper over spørsmål om styrke om typen er vanlig.
+
+      }else{  //Sjekker styrken til de to andre typene.
+          System.out.print("\nHva er legemiddelets styrke?\n>");
+          styrke = intSjekk();
+      }
+
+      System.out.print("\nVennligst skriv navnet på legemiddelet du vil opprette.\n>");
+      String navn = navnSjekk();  //Ber om og sjekker at navnet er gyldig input.
+
+      System.out.print("\nVennligst skriv prisen på legemiddelet.\n>");
+      double pris = doubleSjekk();  //Ber om og sjekker at prisen er gyldig input.
+
+      System.out.print("\nVennligst oppgi mengde virkestoff til legemiddelet.\n>");
+      double virkestoff = doubleSjekk();  //Ber om og sjekker at virkestoff er gyldig input.
+
+
+      if(styrke == 0){  //Sjekker type legemiddel og oppretter det riktige.
+          Legemiddel nyttLegemiddel = new Vanlig(navn, pris, virkestoff);  //Oppretter vanlig om styrke = 0.
+          //legemiddelliste.leggTil(nyttLegemiddel);
+          System.out.println("Opprettet nytt vanlig legemiddel.");  //Kontrollutskrift, FJERN FØR LEVERING!
+      }
+      else if(type.equals("narkotisk")){  //Sjekker om oppgitt type er narkotisk.
+          Legemiddel nyttLegemiddel = new Narkotisk(navn, pris, virkestoff, styrke);
+          //legemiddelliste.leggTil(nyttLegemiddel);
+          System.out.println("Opprettet nytt narkotisk legemiddel");    //Kontrollutskrift, FJERN FØR LEVERING!
+      }
+      else if(type.equals("vanedannende")){  //Sjekker om oppgitt type er vanedannende.
+          Legemiddel nyttLegemiddel = new Vanedannende(navn, pris, virkestoff, styrke);
+          //legemiddelliste.leggTil(nyttLegemiddel);
+          System.out.println("Opprettet nytt vanedannende legemiddel");  //Kontrollutskrift, FJERN FØR LEVERING!
+      }
+  }
+
+
+  private static void opprettNyLege(){  //Metode for å opprette ny lege.
+      System.out.print("\nVennligst skriv navn på legen du vil opprette.\n>");
+      String nyLegeNavn = navnSjekk();  //Sjekker om brukers input er gyldig.
+
+      System.out.print("\nVennligst oppgi legens kontrollID.\n>");
+      int kontrollId = intSjekk();  //Sjekker om brukers input er gyldig.
+
+      if(kontrollId != 0){  //Sjekker om spesialist eller vanlig lege skal opprettes.
+          Spesialist nySpesialist = new Spesialist(nyLegeNavn, kontrollId);
+          //legeliste.leggTil(nySpesialist);
+      }else{
+          Lege nyLege = new Lege(nyLegeNavn);
+          //legeliste.leggTil(nyLege);
+      }
+  }
+
+  private static boolean typeLegemiddelSjekk(String type){  //Metode for å sjekke at bruker
+                                                            //oppgir en av tre typer legemiddel.
+      if (type.equals("narkotisk")){
+          return true;
+      }else if(type.equals("vanedannende")){
+          return true;
+      }else if (type.equals("vanlig")){
+          return true;
+      }
+      return false;  //Om bruker ikke har oppgitt en gyldig type returnes false.
+  }
+
+  private static String navnSjekk(){  //Metode for å sjekke brukers input hvor det blir spurt om navn/tekst.
+      Scanner nyttNavnScanner = new Scanner(System.in);
+      String navn = nyttNavnScanner.next();
+      boolean sjekk = false;
+      while(!sjekk){
+          try{
+              int ikkeFunk = Integer.parseInt(navn);  //Får vi tall som input gir vi feilmelding.
+              System.out.print("\nUgyldig input! Prøv igjen.\n>");
+              navn = nyttNavnScanner.next();
+          }catch(Exception e){
+              sjekk = true;
+          }
+      }
+      return navn;   //Returnerer det lovlige navnet
+  }
+
+  private static double doubleSjekk(){  //Metode for å sjekke brukers double-inputs.
+      Scanner doubleScanner = new Scanner(System.in);
+      boolean sjekk = true;
+      double doubleTall = 0;
+      while(sjekk){
+          try{
+              double nyDouble = doubleScanner.nextDouble();
+              doubleTall = nyDouble;
+              sjekk = false;
+          }catch(InputMismatchException e){
+              System.out.print("\nUgyldig input! Prøv igjen.\n>");
+              doubleScanner.next();  //Pusher scanner til å be om ny input.
+              }
+      }
+      return doubleTall;   //Returnerer den gyldige inputen.
+  }
+
+  private static int intSjekk(){   //Metode for å sjekke brukers int-inputs.
+      Scanner intScanner = new Scanner(System.in);
+      boolean sjekk = true;
+      int intTall = 0;
+      while(sjekk){
+          try{
+              int nyttTall = intScanner.nextInt();
+              intTall = nyttTall;
+              sjekk = false;
+          }catch(InputMismatchException e){
+              System.out.print("\nUgyldig input! Prøv igjen.\n>");
+              intScanner.next();  //Pusher scanner til å be om ny input.
+              }
+      }
+      return intTall;  //Returnerer den gyldige inputen.
   }
 }
