@@ -26,8 +26,10 @@ class Testing {
     System.out.println("\nHvit;");
     System.out.println(spesialisten.skrivHvitResept(paracet, pasient, 2));
     System.out.println("\nTester henting av lista med utskrevende resepter:");
-    spesialisten.hentReseptListe();
-    System.out.println("\nTester om lege kan skrive ut narkotisk:");
+    for(Resept r : spesialisten.hentReseptListe()){
+        System.out.println(r);
+    }
+    System.out.println("\nTester om lege kan skrive tut narkotisk:");
     try{
       lege.skrivHvitResept(extasy, pasient, 2);
   } catch(Exception e){
