@@ -8,3 +8,4 @@ class Vanlig extends Legemiddel {
             "kr\tVirkestoffmengde: " + virkestoff + "mg");
   }
 }
+//Endringer, vil det gå?
