@@ -73,7 +73,6 @@ class Legesystem{
            }
         }
 
-        // Håndtere Seksjon3: Leger
         Scanner scan3 = new Scanner(seksjon3leger);  //Behandler seksjon 3, leger.
         scan3.nextLine();
         while(scan3.hasNextLine()){
