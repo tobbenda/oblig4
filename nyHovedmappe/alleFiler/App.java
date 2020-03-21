@@ -163,7 +163,8 @@ class App{
       Pasient aktuellPasient = hentAktuellPasient();
       System.out.print("\nVennligst oppgi antall reit på resepten\n>");
       int aktuellReit = intSjekk();
-      aktuellLege.skrivHvitResept(aktueltLegemiddel, aktuellPasient, aktuellReit);
+      HvitResept nyHvitResept = aktuellLege.skrivHvitResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
+      nyttSystem.hentReseptListe().leggTil(nyHvitResept);  //Legger den nye resepten i reseptlista.
   }
 
   private static void opprettNyBlaaResept() throws UlovligUtskrift{  //Metode for å opprette blaaresept.
@@ -172,7 +173,8 @@ class App{
       Pasient aktuellPasient = hentAktuellPasient();
       System.out.print("\nVennligst oppgi antall reit på resepten\n>");
       int aktuellReit = intSjekk();
-      aktuellLege.skrivBlaaResept(aktueltLegemiddel, aktuellPasient, aktuellReit);
+      BlaaResept nyBlaaResept = aktuellLege.skrivBlaaResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
+      nyttSystem.hentReseptListe().leggTil(nyBlaaResept);  //Legger den nye resepten i reseptlista.
   }
 
   private static void opprettNyMilitaerResept() throws UlovligUtskrift{  //Metode for å opprette militaerresept.
@@ -181,14 +183,16 @@ class App{
       Pasient aktuellPasient = hentAktuellPasient();
       System.out.print("\nVennligst oppgi antall reit på resepten\n>");
       int aktuellReit = intSjekk();
-      aktuellLege.skrivMilitaerResept(aktueltLegemiddel, aktuellPasient, aktuellReit);
+      MilitaerResept nyMilitaerResept = aktuellLege.skrivMilitaerResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
+      nyttSystem.hentReseptListe().leggTil(nyMilitaerResept);  //Legger den nye resepten i reseptlista.
   }
 
   private static void opprettNyPResept() throws UlovligUtskrift {  //Metode for å opprette p-resept.
       Lege aktuellLege = hentAktuellLege();
       Legemiddel aktueltLegemiddel = hentAktueltLegemiddel();
       Pasient aktuellPasient = hentAktuellPasient();
-      aktuellLege.skrivPResept(aktueltLegemiddel, aktuellPasient);
+      PResept nyPResept = aktuellLege.skrivPResept(aktueltLegemiddel, aktuellPasient); //For å legge til i reseptListe
+      nyttSystem.hentReseptListe().leggTil(nyPResept);  //Legger den nye resepten i reseptlista.
   }
 
   private static Lege hentAktuellLege() throws UlovligUtskrift{  //Metode for å hente lege til reseptutskrift.
