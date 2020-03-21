@@ -2,8 +2,11 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 class App{
+  static Legesystem nyttSystem = new Legesystem();
   public static void main(String[] args) throws InputMismatchException{
     int menyValg = 0;
+
+    //Legesystem nyttSystem = new Legesystem();
     while(menyValg!=6){                    //Innvalg 6 er Exit, så programmet kjører til 6 blir valgt i hovedmenyen.
       int valg = hovedmeny();              //Metoden hovedmeny ligger under, og tar seg av utskrift til, og input fra, bruker.
       if (valg==1){
@@ -20,8 +23,31 @@ class App{
       menyValg=valg;
     }
   }
-  private static void skrivUtAlt(){  //Metode for innvalg 1 - DELOPPGAVE E3
-      ;}
+  // private static void filLesing(String filnavn) throws FileNotFoundException{
+  //     nyttSystem.lesFil(filnavn);
+  // }
+
+  private static void skrivUtAlt(){  //Metode for innvalg 1 Skriver ut alle
+       System.out.println("Oversikt over alle elementer.");
+       System.out.println("Alle registrerte leger:");
+       for(Lege l : nyttSystem.hentLegeListe()){
+          System.out.println(l);
+       }
+
+       System.out.println("\nAlle registrerte pasienter:");
+       for(Pasient p : nyttSystem.hentPasientListe()){
+           System.out.println(p);
+       }
+       System.out.println("\nAlle registrerte legemidler:");
+       for(Legemiddel m : nyttSystem.hentLegemiddelListe()){
+           System.out.println(m);
+       }
+
+       System.out.println("\nAlle registrerte resepter:");
+       for(Resept r : nyttSystem.hentReseptListe()){
+           System.out.println(r);
+       }
+   }
 
   private static void opprett() throws InputMismatchException{  //Metode for innvalg 2 - DELOPPGAVE E4
     Scanner oppretterScanner = new Scanner(System.in);
@@ -145,17 +171,17 @@ class App{
 
       if(styrke == 0){  //Sjekker type legemiddel og oppretter det riktige.
           Legemiddel nyttLegemiddel = new Vanlig(navn, pris, virkestoff);  //Oppretter vanlig om styrke = 0.
-          //legemiddelliste.leggTil(nyttLegemiddel);
+          nyttSystem.hentLegemiddelListe().leggTil(nyttLegemiddel);
           System.out.println("Opprettet nytt vanlig legemiddel.");  //Kontrollutskrift, FJERN FØR LEVERING!
       }
       else if(type.equals("narkotisk")){  //Sjekker om oppgitt type er narkotisk.
           Legemiddel nyttLegemiddel = new Narkotisk(navn, pris, virkestoff, styrke);
-          //legemiddelliste.leggTil(nyttLegemiddel);
+          nyttSystem.hentLegemiddelListe().leggTil(nyttLegemiddel);
           System.out.println("Opprettet nytt narkotisk legemiddel");    //Kontrollutskrift, FJERN FØR LEVERING!
       }
       else if(type.equals("vanedannende")){  //Sjekker om oppgitt type er vanedannende.
           Legemiddel nyttLegemiddel = new Vanedannende(navn, pris, virkestoff, styrke);
-          //legemiddelliste.leggTil(nyttLegemiddel);
+          nyttSystem.hentLegemiddelListe().leggTil(nyttLegemiddel);
           System.out.println("Opprettet nytt vanedannende legemiddel");  //Kontrollutskrift, FJERN FØR LEVERING!
       }
   }
@@ -170,10 +196,10 @@ class App{
 
       if(kontrollId != 0){  //Sjekker om spesialist eller vanlig lege skal opprettes.
           Spesialist nySpesialist = new Spesialist(nyLegeNavn, kontrollId);
-          //legeliste.leggTil(nySpesialist);
+          nyttSystem.hentLegeListe().leggTil(nySpesialist);
       }else{
           Lege nyLege = new Lege(nyLegeNavn);
-          //legeliste.leggTil(nyLege);
+          nyttSystem.hentLegeListe().leggTil(nyLege);
       }
   }
 

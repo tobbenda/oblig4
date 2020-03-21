@@ -7,10 +7,25 @@ class Legesystem{
     String filnavn;
     Lenkeliste<Pasient> pasientListe = new Lenkeliste<Pasient>();
     Lenkeliste<Legemiddel> legemiddelListe = new Lenkeliste<Legemiddel>();
-    Lenkeliste<Resept> resepterListe = new Lenkeliste<Resept>();
+    Lenkeliste<Resept> reseptListe = new Lenkeliste<Resept>();
     Lenkeliste<Lege> legeListe = new SortertLenkeliste<Lege>();  //Oppretter nødvendige lister for bruk i systemet.
 
-    public Legesystem(String filnavn) throws FileNotFoundException, UlovligUtskrift{
+    public Legesystem(){;}
+
+    public Lenkeliste<Pasient> hentPasientListe(){
+        return pasientListe;
+    }
+    public Lenkeliste<Legemiddel> hentLegemiddelListe(){
+        return legemiddelListe;
+    }
+    public Lenkeliste<Resept> hentReseptListe(){
+        return reseptListe;
+    }
+    public Lenkeliste<Lege> hentLegeListe(){  //Metoder for å hente de ulike listene.
+        return legeListe;
+    }
+
+    public void lesFil(String filnavn) throws FileNotFoundException, UlovligUtskrift{
         this.filnavn = filnavn;
         File fil = new File(filnavn);
         Scanner seksjonScanner = new Scanner(fil).useDelimiter("\\s*#\\s*");
@@ -172,7 +187,8 @@ class Legesystem{
 
 class Test{
     public static void main(String[] args) throws FileNotFoundException, UlovligUtskrift{
-        Legesystem les = new Legesystem("myeInndata.txt");
+        Legesystem les = new Legesystem();
+        les.lesFil("myeInndata.txt");
         //Test Pasientseksjon
         for(Pasient p : les.pasientListe){
             System.out.println(p.fodselsnummer);
