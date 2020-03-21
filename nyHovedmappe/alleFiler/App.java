@@ -9,9 +9,9 @@ class App{
     while(menyValg!=6){                    //Innvalg 6 er Exit, så programmet kjører til 6 blir valgt i hovedmenyen.
       int valg = hovedmeny();              //Metoden hovedmeny ligger under, og tar seg av utskrift til, og input fra, bruker.
       if (valg==1){
-        skrivUtAlt();  //kjør Metode for innvalg 1 IKKE FERDIG
+        skrivUtAlt();  //kjør Metode for innvalg 1 Rimelig ferdig, mangler pynt!
       }else if (valg==2){
-        opprett();     //kjør Metode for innvalg 2 IKKE FERDIG
+        opprett();     //kjør Metode for innvalg 2 Rimelig ferdig, sikkert mulig med litt pynt.
       }else if (valg==3){
         brukResept();  //kjør Metode for innvalg 3 IKKE FERDIG
       }else if (valg==4){
