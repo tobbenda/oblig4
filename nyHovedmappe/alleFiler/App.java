@@ -13,7 +13,7 @@ class App{
       }else if (valg==2){
         opprett();     //kjør Metode for innvalg 2 Rimelig ferdig, sikkert mulig med litt pynt.
       }else if (valg==3){
-        brukResept();  //kjør Metode for innvalg 3 IKKE FERDIG
+        brukResept();  //kjør Metode for innvalg 3 Rimelig ferdig, med forbehold.
       }else if (valg==4){
         skrivStatistikk();//kjør Metode for innvalg 4 IKKE FERDIG
       }else if (valg==5){
