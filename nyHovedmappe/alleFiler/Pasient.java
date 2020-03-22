@@ -2,7 +2,7 @@ class Pasient {
     static int idTeller;
     String navn, fodselsnummer;
     int id;
-    Stabel<Resept> reseptStabel;
+    Stabel<Resept> reseptStabel = new Stabel<Resept>();
 
     public Pasient(String navn, String fodselsnummer){
         this.navn = navn;
@@ -21,6 +21,14 @@ class Pasient {
 
     public int hentId(){  //Metode for å hente id.
         return id;
+    }
+
+    public String hentNavn(){  //Metode for å hente navnet på pasienten.
+        return navn;
+    }
+
+    public String hentFnr(){  //Metode for å hente fødselsnummer.
+        return fodselsnummer;
     }
 
     public String toString(){  //Metode for penere utskrift

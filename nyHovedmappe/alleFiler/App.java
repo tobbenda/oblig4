@@ -148,7 +148,7 @@ class App{
 
 
 
-  private static void opprettNyPasient(){
+  private static void opprettNyPasient(){  //Metode for å opprette ny pasient.
       System.out.print("\nVennligst oppgi navnet på pasienten du vil opprette.\n>");
       String pasientNavn = navnSjekk();
       System.out.print("\nVennligst oppgi fødselsnummeret på pasienten.\n>");
@@ -165,6 +165,7 @@ class App{
       int aktuellReit = intSjekk();
       HvitResept nyHvitResept = aktuellLege.skrivHvitResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
       nyttSystem.hentReseptListe().leggTil(nyHvitResept);  //Legger den nye resepten i reseptlista.
+      aktuellPasient.leggTilResept(nyHvitResept);  //Registrer resepten på pasienten det gjelder.
   }
 
   private static void opprettNyBlaaResept() throws UlovligUtskrift{  //Metode for å opprette blaaresept.
@@ -175,6 +176,7 @@ class App{
       int aktuellReit = intSjekk();
       BlaaResept nyBlaaResept = aktuellLege.skrivBlaaResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
       nyttSystem.hentReseptListe().leggTil(nyBlaaResept);  //Legger den nye resepten i reseptlista.
+      aktuellPasient.leggTilResept(nyBlaaResept);  //Registrer resepten på pasienten det gjelder.
   }
 
   private static void opprettNyMilitaerResept() throws UlovligUtskrift{  //Metode for å opprette militaerresept.
@@ -185,6 +187,7 @@ class App{
       int aktuellReit = intSjekk();
       MilitaerResept nyMilitaerResept = aktuellLege.skrivMilitaerResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
       nyttSystem.hentReseptListe().leggTil(nyMilitaerResept);  //Legger den nye resepten i reseptlista.
+      aktuellPasient.leggTilResept(nyMilitaerResept);  //Registrer resepten på pasienten det gjelder.
   }
 
   private static void opprettNyPResept() throws UlovligUtskrift {  //Metode for å opprette p-resept.
@@ -193,6 +196,7 @@ class App{
       Pasient aktuellPasient = hentAktuellPasient();
       PResept nyPResept = aktuellLege.skrivPResept(aktueltLegemiddel, aktuellPasient); //For å legge til i reseptListe
       nyttSystem.hentReseptListe().leggTil(nyPResept);  //Legger den nye resepten i reseptlista.
+      aktuellPasient.leggTilResept(nyPResept);  //Registrer resepten på pasienten det gjelder.
   }
 
   private static Lege hentAktuellLege() throws UlovligUtskrift{  //Metode for å hente lege til reseptutskrift.
@@ -255,12 +259,51 @@ class App{
       return aktuellPasient;
   }
 
-  // METODE FOR Å BRUKE RESEPT:
-  private static void brukResept(){;} //Metode for innvalg 3 - DELOPPGAVE E5
+
+  private static void brukResept(){ //Metode for innvalg 3 - Å bruke en resept.
+      if(nyttSystem.hentReseptListe().stoerrelse() == 0){
+          System.out.println("\nDet finnes ingen resepter å bruke.");  //Skriver ut om det ikke er noen resepter registrert.
+      }else{
+          System.out.println("Hvilken pasient vil du se resepter for?");
+          int listeTeller = 0;
+          for(Pasient pasient : nyttSystem.hentPasientListe()){
+              System.out.println(listeTeller + ": " + pasient.hentNavn() + " (fnr " + pasient.hentFnr() + ")");
+              listeTeller += 1;
+          }                     //Skriver ut alle registrerte pasienter.
+          System.out.print(">");
+          Pasient valgtPasient = velgPasient();
+          if(valgtPasient.hentAlleResept().stoerrelse() == 0){  //Sjekker om pasienten har noen registrerte resepter.
+              System.out.println("\nDen valgte pasienten har ingen registrerte resepter å bruke.");  //Skriver ut om det ikke finnes noen resepter
+                                                                                                     //registrert på pasienten.
+          }else{          //Fins det resepter å bruke blir bruker presentert med disse.
+              System.out.println("\nValgt pasient: " + valgtPasient.hentNavn() + " (fnr " + valgtPasient.hentFnr() + ")");
+              System.out.println("Hvilken resept vil du bruke?");
+              listeTeller = 0;
+              for(Resept resept : valgtPasient.hentAlleResept()){
+                  System.out.println(listeTeller + ": " + resept.hentLegemiddel() + " (" + resept.hentReit() + " reit)");
+                  listeTeller += 1;
+              }                     //Skriver ut alle reseptene.
+              System.out.print(">");
+              Resept valgtResept = velgResept(valgtPasient);  //Lar bruker velge resept.
+              if(valgtResept.hentReit() == 0){          //Sjekker om det er gjenstående reit på resepten.
+                  System.out.println("Kunne ikke bruke valgte resept (ingen gjenværende reit).");
+              }else{
+                  valgtResept.bruk();
+                  System.out.println("Brukte resept på " + valgtResept.hentLegemiddel() + ". Antall gjenværende reit: "
+                  + valgtResept.hentReit());
+              }
+          }
+      }
+  }
+
   // METODE FOR Å SKRIVE DIV STATISTIKK:
-  private static void skrivStatistikk(){;} //Metode for innvalg 4 - DELOPPGAVE E6
+  private static void skrivStatistikk(){; //Metode for innvalg 4 - DELOPPGAVE E6
+
+  }
   // METODE FOR Å SKRIVE TIL FIL:
-  private static void skrivTilFil(){;}  //Metode for innvalg 5 - DELOPPGAVE E8
+  private static void skrivTilFil(){;  //Metode for innvalg 5 - DELOPPGAVE E8
+
+  }
 
   static private int hovedmeny() throws InputMismatchException{
     int status = 0;
@@ -287,7 +330,43 @@ class App{
     return 0;
   }
 
+  private static Pasient velgPasient(){  //Metode for å velge pasient til reseptbruk.
+      int pasientId = intSjekk();
+      Pasient valgtPasient = nyttSystem.hentPasientListe().hent(0);
+      int listeStoerrelse = nyttSystem.hentPasientListe().stoerrelse() - 1;
+      boolean innenforListeIndex = false;
+      while(!innenforListeIndex){
+          try{
+              valgtPasient = nyttSystem.hentPasientListe().hent(pasientId);
+              innenforListeIndex = true;
+          }catch(UgyldigListeIndeks e){
+          System.out.println("Oppgitt pasientID er ikke i pasientlista. Vennligst oppgi et tall mellom 0 og "
+          + listeStoerrelse);
+          System.out.print(">");
+          pasientId = intSjekk();
+          }
+      }
+      return valgtPasient;
+  }
 
+  private static Resept velgResept(Pasient valgtPasient){  //Metode for å velge resept til reseptbruk.
+      int reseptNr = intSjekk();
+      Resept valgtResept = valgtPasient.hentAlleResept().hent(0);
+      int listeStoerrelse = valgtPasient.hentAlleResept().stoerrelse()-1;
+      boolean innenforListeIndex = false;
+      while(!innenforListeIndex){
+          try{
+              valgtResept = valgtPasient.hentAlleResept().hent(reseptNr);
+              innenforListeIndex = true;
+          }catch(UgyldigListeIndeks e){
+              System.out.println("Oppgitt reseptnr er ikke innenfor reseptlisteindeksen. Vennligst oppgi et tall mellom 0 og "
+              + listeStoerrelse);
+              System.out.print(">");
+              reseptNr = intSjekk();
+          }
+      }
+      return valgtResept;
+  }
 
   private static void opprettNyttLegemiddel(){  //Metode for å legge til legemiddel.
       System.out.print("\nVennligst skriv hvilken type legemiddel du vil opprette.\n>");
@@ -385,7 +464,7 @@ class App{
       boolean sjekk = false;
       while(!sjekk){
           try{
-              int funk = Integer.parseInt(fnr);  //Får vi tall som input er alt som det skal!
+              Long funk = Long.parseLong(fnr);  //Får vi tall som input er alt som det skal!
               sjekk = true;
           }catch(Exception e){
               System.out.print("\nUgyldig input! Forventet er et svar bestående av tall.\n>");
