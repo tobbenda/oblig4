@@ -157,47 +157,71 @@ class App{
       nyttSystem.hentPasientListe().leggTil(nyPasient);
   }
 
+
+
   private static void opprettNyHvitResept() throws UlovligUtskrift{  //Metode for å opprette hvitresept.
-      Lege aktuellLege = hentAktuellLege();
-      Legemiddel aktueltLegemiddel = hentAktueltLegemiddel();
-      Pasient aktuellPasient = hentAktuellPasient();
-      System.out.print("\nVennligst oppgi antall reit på resepten\n>");
-      int aktuellReit = intSjekk();
-      HvitResept nyHvitResept = aktuellLege.skrivHvitResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
-      nyttSystem.hentReseptListe().leggTil(nyHvitResept);  //Legger den nye resepten i reseptlista.
-      aktuellPasient.leggTilResept(nyHvitResept);  //Registrer resepten på pasienten det gjelder.
+      Lege aktuellLege = hentAktuellLege();     //Henter den aktuelle legen.
+      Legemiddel aktueltLegemiddel = hentAktueltLegemiddel();   //Henter det aktuelle legemiddelet.
+      if (autoriserLege(aktuellLege, aktueltLegemiddel)){  //Sjekker om legen kan skrive ut ønsket legemiddel på resept, før evt å gå videre.
+          Pasient aktuellPasient = hentAktuellPasient();    //Henter den aktuelle pasienten.
+          System.out.print("\nVennligst oppgi antall reit på resepten\n>");
+          int aktuellReit = intSjekk();
+          HvitResept nyHvitResept = aktuellLege.skrivHvitResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
+          nyttSystem.hentReseptListe().leggTil(nyHvitResept);  //Legger den nye resepten i reseptlista.
+          aktuellPasient.leggTilResept(nyHvitResept);  //Registrer resepten på pasienten det gjelder.
+      }else{    //Printer en melding til bruker om legen ikke er godkjent til utskrift av oppgitte legemiddel.
+          System.out.println("\nDenne legen er ikke godkjent til å skrive ut narkotiske legemidler.");
+      }
   }
 
   private static void opprettNyBlaaResept() throws UlovligUtskrift{  //Metode for å opprette blaaresept.
-      Lege aktuellLege = hentAktuellLege();
-      Legemiddel aktueltLegemiddel = hentAktueltLegemiddel();
-      Pasient aktuellPasient = hentAktuellPasient();
-      System.out.print("\nVennligst oppgi antall reit på resepten\n>");
-      int aktuellReit = intSjekk();
-      BlaaResept nyBlaaResept = aktuellLege.skrivBlaaResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
-      nyttSystem.hentReseptListe().leggTil(nyBlaaResept);  //Legger den nye resepten i reseptlista.
-      aktuellPasient.leggTilResept(nyBlaaResept);  //Registrer resepten på pasienten det gjelder.
+      Lege aktuellLege = hentAktuellLege();     //Henter den aktuelle legen.
+      Legemiddel aktueltLegemiddel = hentAktueltLegemiddel();     //Henter det aktuelle legemiddelet.
+      if(autoriserLege(aktuellLege, aktueltLegemiddel)){    //Sjekker om legen kan skrive ut ønsket legemiddel på resept, før evt å gå videre.
+          Pasient aktuellPasient = hentAktuellPasient();    //Henter den aktuelle pasienten.
+          System.out.print("\nVennligst oppgi antall reit på resepten\n>");
+          int aktuellReit = intSjekk();
+          BlaaResept nyBlaaResept = aktuellLege.skrivBlaaResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
+          nyttSystem.hentReseptListe().leggTil(nyBlaaResept);  //Legger den nye resepten i reseptlista.
+          aktuellPasient.leggTilResept(nyBlaaResept);  //Registrer resepten på pasienten det gjelder.
+      }else{     //Printer en melding til bruker om legen ikke er godkjent til utskrift av oppgitte legemiddel.
+          System.out.println("\nDenne legen er ikke godkjent til å skrive ut narkotiske legemidler.");
+      }
   }
 
   private static void opprettNyMilitaerResept() throws UlovligUtskrift{  //Metode for å opprette militaerresept.
-      Lege aktuellLege = hentAktuellLege();
-      Legemiddel aktueltLegemiddel = hentAktueltLegemiddel();
-      Pasient aktuellPasient = hentAktuellPasient();
-      System.out.print("\nVennligst oppgi antall reit på resepten\n>");
-      int aktuellReit = intSjekk();
-      MilitaerResept nyMilitaerResept = aktuellLege.skrivMilitaerResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
-      nyttSystem.hentReseptListe().leggTil(nyMilitaerResept);  //Legger den nye resepten i reseptlista.
-      aktuellPasient.leggTilResept(nyMilitaerResept);  //Registrer resepten på pasienten det gjelder.
+      Lege aktuellLege = hentAktuellLege();     //Henter den aktuelle legen.
+      Legemiddel aktueltLegemiddel = hentAktueltLegemiddel();   //Henter det akutelle legemiddelet.
+      if(autoriserLege(aktuellLege, aktueltLegemiddel)){    //Sjekker om legen kan skrive ut ønsket legemiddel på resept, før evt å gå videre.
+          Pasient aktuellPasient = hentAktuellPasient();    //Henter den aktuelle pasienten.
+          System.out.print("\nVennligst oppgi antall reit på resepten\n>");
+          int aktuellReit = intSjekk();
+          MilitaerResept nyMilitaerResept = aktuellLege.skrivMilitaerResept(aktueltLegemiddel, aktuellPasient, aktuellReit); //For å legge til i reseptListe
+          nyttSystem.hentReseptListe().leggTil(nyMilitaerResept);  //Legger den nye resepten i reseptlista.
+          aktuellPasient.leggTilResept(nyMilitaerResept);  //Registrer resepten på pasienten det gjelder.
+      }else{     //Printer en melding til bruker om legen ikke er godkjent til utskrift av oppgitte legemiddel.
+          System.out.println("\nDenne legen er ikke godkjent til å skrive ut narkotiske legemidler.");
+      }
+
   }
 
   private static void opprettNyPResept() throws UlovligUtskrift {  //Metode for å opprette p-resept.
-      Lege aktuellLege = hentAktuellLege();
-      Legemiddel aktueltLegemiddel = hentAktueltLegemiddel();
-      Pasient aktuellPasient = hentAktuellPasient();
-      PResept nyPResept = aktuellLege.skrivPResept(aktueltLegemiddel, aktuellPasient); //For å legge til i reseptListe
-      nyttSystem.hentReseptListe().leggTil(nyPResept);  //Legger den nye resepten i reseptlista.
-      aktuellPasient.leggTilResept(nyPResept);  //Registrer resepten på pasienten det gjelder.
+      Lege aktuellLege = hentAktuellLege();     //Henter den aktuelle legen.
+      Legemiddel aktueltLegemiddel = hentAktueltLegemiddel();   //Henter det aktuelle legemiddelet.
+      if(autoriserLege(aktuellLege, aktueltLegemiddel)){    //Sjekker om legen kan skrive ut ønsket legemiddel på resept, før evt å gå videre.
+          Pasient aktuellPasient = hentAktuellPasient();    //Henter den aktuelle pasienten.
+          PResept nyPResept = aktuellLege.skrivPResept(aktueltLegemiddel, aktuellPasient); //For å legge til i reseptListe
+          nyttSystem.hentReseptListe().leggTil(nyPResept);  //Legger den nye resepten i reseptlista.
+          aktuellPasient.leggTilResept(nyPResept);  //Registrer resepten på pasienten det gjelder.
+      }else{     //Printer en melding til bruker om legen ikke er godkjent til utskrift av oppgitte legemiddel.
+          System.out.println("\nDenne legen er ikke godkjent til å skrive ut narkotiske legemidler.");
+      }
+
   }
+
+
+
+
 
   private static Lege hentAktuellLege() throws UlovligUtskrift{  //Metode for å hente lege til reseptutskrift.
       System.out.print("\nVennligst oppgi navnet på legen som skal opprette resepten\n>");
@@ -258,6 +282,22 @@ class App{
       }
       return aktuellPasient;
   }
+
+  private static boolean autoriserLege(Lege lege, Legemiddel legemiddel){  //Metode som gir tilbakemelding på om legen kan skrive ut
+                                                                           //ønskede legemiddel på resept.
+      boolean autorisasjon = false;
+      if (!(legemiddel instanceof Narkotisk)){
+          autorisasjon = true;
+      }else if (legemiddel instanceof Narkotisk && lege instanceof Spesialist){
+          autorisasjon = true;
+      }else if (legemiddel instanceof Narkotisk && (!(lege instanceof Spesialist))){
+          autorisasjon = false;
+      }
+      return autorisasjon;
+  }
+
+
+
 
 
   private static void brukResept(){ //Metode for innvalg 3 - Å bruke en resept.
@@ -367,6 +407,8 @@ class App{
       }
       return valgtResept;
   }
+
+
 
   private static void opprettNyttLegemiddel(){  //Metode for å legge til legemiddel.
       System.out.print("\nVennligst skriv hvilken type legemiddel du vil opprette.\n>");
