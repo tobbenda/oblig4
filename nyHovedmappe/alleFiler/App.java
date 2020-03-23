@@ -6,7 +6,7 @@ class App{
   static Legesystem nyttSystem = new Legesystem();  //Oppretter et legesystem for bruk i appen.
   public static void main(String[] args) throws InputMismatchException, UlovligUtskrift, FileNotFoundException{
     int menyValg = 0;
-    filLesing("inndata.txt");               //Lar fil opprette litt leger og midler for bruk i programmet mens vi tester. !!!!FJERN FØR LEVERING!!!!
+    filLesing("myeInndata.txt");               //Lar fil opprette litt leger og midler for bruk i programmet mens vi tester. !!!!FJERN FØR LEVERING!!!!
     while(menyValg!=6){                    //Innvalg 6 er Exit, så programmet kjører til 6 blir valgt i hovedmenyen.
       int valg = hovedmeny();              //Metoden hovedmeny ligger under, og tar seg av utskrift til, og input fra, bruker.
       if (valg==1){
