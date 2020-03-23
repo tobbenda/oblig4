@@ -222,65 +222,69 @@ class App{
 
 
 
-
-
   private static Lege hentAktuellLege() throws UlovligUtskrift{  //Metode for å hente lege til reseptutskrift.
-      System.out.print("\nVennligst oppgi navnet på legen som skal opprette resepten\n>");
-      String valgtLege = navnSjekk();
+      System.out.println("\nVennligst oppgi hvilken lege som skal opprette resepten");
       Lege aktuellLege = nyttSystem.hentLegeListe().hent(0);
-      boolean finsLegen = false;
-      while (!finsLegen){
-          for(Lege lege : nyttSystem.hentLegeListe()){
-              if(lege.hentNavn().equals(valgtLege)){
-                  finsLegen = true;
-                  aktuellLege = lege;
-              }
-          }
-          if(!finsLegen){
-              System.out.print("\nLegenavnet du oppga er ikke registrert. Vennligst prøv igjen.\n>");
-              valgtLege = navnSjekk();
+      int listeTeller = 0;
+      for(Lege lege : nyttSystem.hentLegeListe()){
+          System.out.println(listeTeller + ": Navn:" + lege.hentNavn());
+          listeTeller += 1;
+      }
+      System.out.print(">");
+      int valgtLege = intSjekk();
+      boolean registrert = false;
+      while(!registrert){
+          if(valgtLege < nyttSystem.hentLegeListe().stoerrelse()){
+              aktuellLege = nyttSystem.hentLegeListe().hent(valgtLege);
+              registrert = true;
+          }else{
+            System.out.println("\nVennligst skriv et tall mellom 0 og " + nyttSystem.hentLegeListe().stoerrelse());
           }
       }
       return aktuellLege;
   }
 
   private static Legemiddel hentAktueltLegemiddel() throws UlovligUtskrift{  //Metode for å hente legemiddelet til reseptutskrift.
-      System.out.print("\nVennligst oppgi navnet på legemiddelet som skal på resepten\n>");
-      String valgtLegemiddel = navnSjekk();
+      System.out.println("\nVennligst oppgi hvilket legemiddel som skal på resepten");
+      int listeTeller = 0;
       Legemiddel aktueltLegemiddel = nyttSystem.hentLegemiddelListe().hent(0);
+      for(Legemiddel middel : nyttSystem.hentLegemiddelListe()){
+          System.out.println(listeTeller + ": Navn:" + middel.hentNavn());
+          listeTeller += 1;
+      }
+      System.out.print(">");
+      int valgtLegemiddel = intSjekk();
       boolean finsMiddelet = false;
       while (!finsMiddelet){
-          for(Legemiddel legemiddel : nyttSystem.hentLegemiddelListe()){
-              if(legemiddel.hentNavn().equals(valgtLegemiddel)){
+              if(valgtLegemiddel < nyttSystem.hentLegemiddelListe().stoerrelse()){
+                  aktueltLegemiddel = nyttSystem.hentLegemiddelListe().hent(valgtLegemiddel);
                   finsMiddelet = true;
-                  aktueltLegemiddel = legemiddel;
+              }else{
+                  System.out.println("\nVennligst skriv et tall mellom 0 og " + (nyttSystem.hentLegemiddelListe().stoerrelse() -1));
               }
           }
-          if(!finsMiddelet){
-              System.out.print("\nLegemiddelet du oppga er ikke registrert. Vennligst prøv igjen.\n>");
-              valgtLegemiddel = navnSjekk();
-          }
-      }
       return aktueltLegemiddel;
   }
 
   private static Pasient hentAktuellPasient() throws UlovligUtskrift{  //Metode for å hente pasient til reseptutskrift.
-      System.out.print("\nVennligst oppgi id på pasienten som skal motta resepten\n>");
-      int valgtPasient = intSjekk();
+      System.out.println("\nVennligst oppgi id på pasienten som skal motta resepten");
+      int listeTeller = 0;
       Pasient aktuellPasient = nyttSystem.hentPasientListe().hent(0);
+      for(Pasient pasient : nyttSystem.hentPasientListe()){
+          System.out.println(listeTeller + ": Navn:" + pasient.hentNavn());
+          listeTeller += 1;
+      }
+      System.out.print(">");
+      int valgtPasient = intSjekk();
       boolean finsPasienten = false;
       while (!finsPasienten){
-          for(Pasient pasient : nyttSystem.hentPasientListe()){
-              if(pasient.hentId() == valgtPasient){
+              if(valgtPasient < nyttSystem.hentPasientListe().stoerrelse()){
+                  aktuellPasient = nyttSystem.hentPasientListe().hent(valgtPasient);
                   finsPasienten = true;
-                  aktuellPasient = pasient;
+              }else{
+                  System.out.println("\nVennligst skriv et tall mellom 0 og " + (nyttSystem.hentPasientListe().stoerrelse() -1));
               }
           }
-          if(!finsPasienten){
-              System.out.print("\nPasienten du oppga er ikke registrert. Vennligst prøv igjen.\n>");
-              valgtPasient = intSjekk();
-          }
-      }
       return aktuellPasient;
   }
 
@@ -338,61 +342,111 @@ class App{
   }
 
   // // METODE FOR Å SKRIVE DIV STATISTIKK:
-  private static void skrivStatistikk(){;}// throws InputMismatchException, UlovligUtskrift{ //Metode for innvalg 4 - DELOPPGAVE E6
-  //     Scanner typeStatistikkScanner = new Scanner(System.in);
-  //     int typeStatistikkValg = 0;
-  //
-  //     if(nyttSystem.hentLegeListe().stoerrelse() == 0 || nyttSystem.hentLegemiddelListe().stoerrelse() == 0
-  //       || nyttSystem.hentPasientListe().stoerrelse() == 0 || nyttSystem.hentReseptListe().stoerrelse() == 0){
-  //           System.out.println("\nKan ikke vise statistikk fordi det mangler elementer.");
-  //       }
-  //       else {
-  //         while(typeStatistikkValg < 1 || typeStatistikkValg > 3){   //Lager en undermeny for å velge hva slags statistikk man ønsker å se.
-  //           System.out.println("\nHvilken type statistikk?");
-  //           System.out.printf("%-80s"+"%s", "\nTotalt antall utskrevne resepter på vanedannende legemidler?", "Tast 1");
-  //           System.out.printf("%-80s"+"%s", "\nTotalt antall utskrevne resepter på narkotiske legemidler?","Tast 2");
-  //           System.out.printf("%-80s"+"%s", "\nStatistikk om mulig misbruk av narkotika?","Tast 3\n>");
-  //           try{
-  //               typeStatistikkValg = typeStatistikkScanner.nextInt();
-  //               if(typeStatistikkValg < 1 || typeStatistikkValg > 3){
-  //                 System.out.println("\n\nUgyldig input! Prøv igjen\n");
-  //               }
-  //           }catch(InputMismatchException e){
-  //               System.out.println("\nUgyldig input! Prøv igjen.");
-  //               typeStatistikkScanner.next();
-  //           }
-  //         }
-  //      }
-  //      if (typeStatistikkValg == 1){
-  //          totaltVanedannendeResepter();
-  //      }
-  //      else if (typeStatistikkValg == 2){
-  //          totaltNarkotiskeResepter();
-  //      }
-  //      else if (typeStatistikkValg == 3){
-  //          muligNarkotikaMisbruk();
-  //      }
-  // }
-  // private static int totaltVanedannendeResepter(){
-  //     int teller = 0;
-  //     for (Resept r : nyttSystem.hentReseptListe()){
-  //         for (Legemiddel m : Resept r){
-  //             if (m instanceof Vanedannende){
-  //                 teller++;
-  //             }
-  //         }
-  //     }
-  //     return teller;
-  // }
-  // private static int totaltNarkotiskeResepter(){
-  //
-  // }
-  // private static int muligNarkotikaMisbruk(){
-  //
-  // }
+  private static void skrivStatistikk() throws InputMismatchException, UlovligUtskrift{ //Metode for innvalg 4 - DELOPPGAVE E6
+      Scanner typeStatistikkScanner = new Scanner(System.in);
+      int typeStatistikkValg = 0;
+
+      if(nyttSystem.hentLegeListe().stoerrelse() == 0 || nyttSystem.hentLegemiddelListe().stoerrelse() == 0
+        || nyttSystem.hentPasientListe().stoerrelse() == 0 || nyttSystem.hentReseptListe().stoerrelse() == 0){
+            System.out.println("\nKan ikke vise statistikk fordi det mangler elementer.");
+        }
+        else {
+          while(typeStatistikkValg < 1 || typeStatistikkValg > 3){   //Lager en undermeny for å velge hva slags statistikk man ønsker å se.
+            System.out.println("\nHvilken type statistikk?");
+            System.out.printf("%-80s"+"%s", "\nTotalt antall utskrevne resepter på vanedannende legemidler?", "Tast 1");
+            System.out.printf("%-80s"+"%s", "\nTotalt antall utskrevne resepter på narkotiske legemidler?","Tast 2");
+            System.out.printf("%-80s"+"%s", "\nStatistikk om mulig misbruk av narkotika?","Tast 3\n>");
+            try{
+                typeStatistikkValg = typeStatistikkScanner.nextInt();
+                if(typeStatistikkValg < 1 || typeStatistikkValg > 3){
+                  System.out.println("\n\nUgyldig input! Prøv igjen\n");
+                }
+            }catch(InputMismatchException e){
+                System.out.println("\nUgyldig input! Prøv igjen.");
+                typeStatistikkScanner.next();
+            }
+          }
+       }
+       if (typeStatistikkValg == 1){
+           int antall = totaltVanedannendeResepter();
+           System.out.println("\nAntall resepter med vanedannende legemidler: " + antall);
+       }
+       else if (typeStatistikkValg == 2){
+           int antall = totaltNarkotiskeResepter();
+           System.out.println("\nAntall resepter med narkotiske legemidler: " + antall);
+       }
+       else if (typeStatistikkValg == 3){
+           System.out.println("\nLeger med registrerte narkotiske resepter, og antallet av disse.");
+           for (Lege l : muligNarkotikaMisbrukLeger()){
+               System.out.println(l + "Antall narkotiske resepter: " + antallNarkotiskeResepter(l));
+           }
+           System.out.println("\nPasienter med gyldig resept på narkotiske legemidler, og antallet av disse.");
+           for (Pasient p : muligNarkotikaMisbrukPasienter()){
+               System.out.println(p + "Antall narkotiske resepter: " + antallNarkotiskeResepter(p));
+           }
+       }
+  }
+
+  private static int totaltVanedannendeResepter(){
+      int teller = 0;
+      for (Resept r : nyttSystem.hentReseptListe()){
+          if(r.hentLegemiddel() instanceof Vanedannende){
+              teller++;
+          }
+      }
+      return teller;
+   }
+
+   private static int totaltNarkotiskeResepter(){
+       int teller = 0;
+       for (Resept r : nyttSystem.hentReseptListe()){
+           if(r.hentLegemiddel() instanceof Narkotisk){
+               teller++;
+           }
+       }
+       return teller;
+  }
+
+   private static Lenkeliste<Lege> muligNarkotikaMisbrukLeger(){
+       Lenkeliste<Lege> legerMedNarkotisk = new SortertLenkeliste<>();
+       for (Resept r : nyttSystem.hentReseptListe()){
+           if (r.hentLegemiddel() instanceof Narkotisk){
+               legerMedNarkotisk.leggTil(r.hentLege());
+           }
+       }
+       return legerMedNarkotisk;
+  }
+
+  private static Lenkeliste<Pasient> muligNarkotikaMisbrukPasienter(){
+      Lenkeliste<Pasient> pasienterMedNarkotisk = new Lenkeliste<>();
+      for (Resept r : nyttSystem.hentReseptListe()){
+          if (r.hentLegemiddel() instanceof Narkotisk){
+              pasienterMedNarkotisk.leggTil(r.hentPasient());
+          }
+      }
+      return pasienterMedNarkotisk;
+  }
 
 
+  private static int antallNarkotiskeResepter(Lege lege){
+      int teller = 0;
+      for(Resept r : lege.hentReseptListe()){
+          if(r.hentLegemiddel() instanceof Narkotisk){
+              teller ++;
+          }
+      }
+      return teller;
+  }
 
+  private static int antallNarkotiskeResepter(Pasient pasient){
+      int teller = 0;
+      for(Resept r : pasient.hentAlleResept()){
+          if(r.hentLegemiddel() instanceof Narkotisk){
+              teller ++;
+          }
+      }
+      return teller;
+  }
 
   // METODE FOR Å SKRIVE TIL FIL:
   private static void skrivTilFil(){;  //Metode for innvalg 5 - DELOPPGAVE E8
