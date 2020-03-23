@@ -222,65 +222,69 @@ class App{
 
 
 
-
-
   private static Lege hentAktuellLege() throws UlovligUtskrift{  //Metode for å hente lege til reseptutskrift.
-      System.out.print("\nVennligst oppgi navnet på legen som skal opprette resepten\n>");
-      String valgtLege = navnSjekk();
+      System.out.println("\nVennligst oppgi hvilken lege som skal opprette resepten");
       Lege aktuellLege = nyttSystem.hentLegeListe().hent(0);
-      boolean finsLegen = false;
-      while (!finsLegen){
-          for(Lege lege : nyttSystem.hentLegeListe()){
-              if(lege.hentNavn().equals(valgtLege)){
-                  finsLegen = true;
-                  aktuellLege = lege;
-              }
-          }
-          if(!finsLegen){
-              System.out.print("\nLegenavnet du oppga er ikke registrert. Vennligst prøv igjen.\n>");
-              valgtLege = navnSjekk();
+      int listeTeller = 0;
+      for(Lege lege : nyttSystem.hentLegeListe()){
+          System.out.println(listeTeller + ": Navn:" + lege.hentNavn());
+          listeTeller += 1;
+      }
+      System.out.print(">");
+      int valgtLege = intSjekk();
+      boolean registrert = false;
+      while(!registrert){
+          if(valgtLege < nyttSystem.hentLegeListe().stoerrelse()){
+              aktuellLege = nyttSystem.hentLegeListe().hent(valgtLege);
+              registrert = true;
+          }else{
+            System.out.println("\nVennligst skriv et tall mellom 0 og " + nyttSystem.hentLegeListe().stoerrelse());
           }
       }
       return aktuellLege;
   }
 
   private static Legemiddel hentAktueltLegemiddel() throws UlovligUtskrift{  //Metode for å hente legemiddelet til reseptutskrift.
-      System.out.print("\nVennligst oppgi navnet på legemiddelet som skal på resepten\n>");
-      String valgtLegemiddel = navnSjekk();
+      System.out.println("\nVennligst oppgi hvilket legemiddel som skal på resepten");
+      int listeTeller = 0;
       Legemiddel aktueltLegemiddel = nyttSystem.hentLegemiddelListe().hent(0);
+      for(Legemiddel middel : nyttSystem.hentLegemiddelListe()){
+          System.out.println(listeTeller + ": Navn:" + middel.hentNavn());
+          listeTeller += 1;
+      }
+      System.out.print(">");
+      int valgtLegemiddel = intSjekk();
       boolean finsMiddelet = false;
       while (!finsMiddelet){
-          for(Legemiddel legemiddel : nyttSystem.hentLegemiddelListe()){
-              if(legemiddel.hentNavn().equals(valgtLegemiddel)){
+              if(valgtLegemiddel < nyttSystem.hentLegemiddelListe().stoerrelse()){
+                  aktueltLegemiddel = nyttSystem.hentLegemiddelListe().hent(valgtLegemiddel);
                   finsMiddelet = true;
-                  aktueltLegemiddel = legemiddel;
+              }else{
+                  System.out.println("\nVennligst skriv et tall mellom 0 og " + (nyttSystem.hentLegemiddelListe().stoerrelse() -1));
               }
           }
-          if(!finsMiddelet){
-              System.out.print("\nLegemiddelet du oppga er ikke registrert. Vennligst prøv igjen.\n>");
-              valgtLegemiddel = navnSjekk();
-          }
-      }
       return aktueltLegemiddel;
   }
 
   private static Pasient hentAktuellPasient() throws UlovligUtskrift{  //Metode for å hente pasient til reseptutskrift.
-      System.out.print("\nVennligst oppgi id på pasienten som skal motta resepten\n>");
-      int valgtPasient = intSjekk();
+      System.out.println("\nVennligst oppgi id på pasienten som skal motta resepten");
+      int listeTeller = 0;
       Pasient aktuellPasient = nyttSystem.hentPasientListe().hent(0);
+      for(Pasient pasient : nyttSystem.hentPasientListe()){
+          System.out.println(listeTeller + ": Navn:" + pasient.hentNavn());
+          listeTeller += 1;
+      }
+      System.out.print(">");
+      int valgtPasient = intSjekk();
       boolean finsPasienten = false;
       while (!finsPasienten){
-          for(Pasient pasient : nyttSystem.hentPasientListe()){
-              if(pasient.hentId() == valgtPasient){
+              if(valgtPasient < nyttSystem.hentPasientListe().stoerrelse()){
+                  aktuellPasient = nyttSystem.hentPasientListe().hent(valgtPasient);
                   finsPasienten = true;
-                  aktuellPasient = pasient;
+              }else{
+                  System.out.println("\nVennligst skriv et tall mellom 0 og " + (nyttSystem.hentPasientListe().stoerrelse() -1));
               }
           }
-          if(!finsPasienten){
-              System.out.print("\nPasienten du oppga er ikke registrert. Vennligst prøv igjen.\n>");
-              valgtPasient = intSjekk();
-          }
-      }
       return aktuellPasient;
   }
 
