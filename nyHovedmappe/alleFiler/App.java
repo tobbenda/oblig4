@@ -4,8 +4,9 @@ import java.io.FileNotFoundException;
 
 class App{
   static Legesystem nyttSystem = new Legesystem();  //Oppretter et legesystem for bruk i appen.
-  public static void main(String[] args) throws InputMismatchException, UlovligUtskrift{
+  public static void main(String[] args) throws InputMismatchException, UlovligUtskrift, FileNotFoundException{
     int menyValg = 0;
+    filLesing("inndata.txt");               //Lar fil opprette litt leger og midler for bruk i programmet mens vi tester. !!!!FJERN FØR LEVERING!!!!
     while(menyValg!=6){                    //Innvalg 6 er Exit, så programmet kjører til 6 blir valgt i hovedmenyen.
       int valg = hovedmeny();              //Metoden hovedmeny ligger under, og tar seg av utskrift til, og input fra, bruker.
       if (valg==1){
@@ -23,7 +24,7 @@ class App{
     }
   }
 
-  private static void filLesing(String filnavn) throws FileNotFoundException, UlovligUtskrift{
+  private static void filLesing(String filnavn) throws FileNotFoundException, UlovligUtskrift{  //Metode for å lese filer etter gitte mønster.
       nyttSystem.lesFil(filnavn);
   }
 
@@ -97,7 +98,7 @@ class App{
                                //elementer av lege, legemiddel og pasient.
       Scanner typeReseptScanner = new Scanner(System.in);
       int typeReseptValg=0;
-      if(nyttSystem.hentLegeListe().stoerrelse() == 0 || nyttSystem.hentLegeListe().stoerrelse() == 0
+      if(nyttSystem.hentLegeListe().stoerrelse() == 0 || nyttSystem.hentLegemiddelListe().stoerrelse() == 0
         || nyttSystem.hentPasientListe().stoerrelse() == 0){
             System.out.println("\nKan ikke opprette resept fordi det mangler elementer.");
         }else{
@@ -336,10 +337,63 @@ class App{
       }
   }
 
-  // METODE FOR Å SKRIVE DIV STATISTIKK:
-  private static void skrivStatistikk(){; //Metode for innvalg 4 - DELOPPGAVE E6
+  // // METODE FOR Å SKRIVE DIV STATISTIKK:
+  private static void skrivStatistikk(){;}// throws InputMismatchException, UlovligUtskrift{ //Metode for innvalg 4 - DELOPPGAVE E6
+  //     Scanner typeStatistikkScanner = new Scanner(System.in);
+  //     int typeStatistikkValg = 0;
+  //
+  //     if(nyttSystem.hentLegeListe().stoerrelse() == 0 || nyttSystem.hentLegemiddelListe().stoerrelse() == 0
+  //       || nyttSystem.hentPasientListe().stoerrelse() == 0 || nyttSystem.hentReseptListe().stoerrelse() == 0){
+  //           System.out.println("\nKan ikke vise statistikk fordi det mangler elementer.");
+  //       }
+  //       else {
+  //         while(typeStatistikkValg < 1 || typeStatistikkValg > 3){   //Lager en undermeny for å velge hva slags statistikk man ønsker å se.
+  //           System.out.println("\nHvilken type statistikk?");
+  //           System.out.printf("%-80s"+"%s", "\nTotalt antall utskrevne resepter på vanedannende legemidler?", "Tast 1");
+  //           System.out.printf("%-80s"+"%s", "\nTotalt antall utskrevne resepter på narkotiske legemidler?","Tast 2");
+  //           System.out.printf("%-80s"+"%s", "\nStatistikk om mulig misbruk av narkotika?","Tast 3\n>");
+  //           try{
+  //               typeStatistikkValg = typeStatistikkScanner.nextInt();
+  //               if(typeStatistikkValg < 1 || typeStatistikkValg > 3){
+  //                 System.out.println("\n\nUgyldig input! Prøv igjen\n");
+  //               }
+  //           }catch(InputMismatchException e){
+  //               System.out.println("\nUgyldig input! Prøv igjen.");
+  //               typeStatistikkScanner.next();
+  //           }
+  //         }
+  //      }
+  //      if (typeStatistikkValg == 1){
+  //          totaltVanedannendeResepter();
+  //      }
+  //      else if (typeStatistikkValg == 2){
+  //          totaltNarkotiskeResepter();
+  //      }
+  //      else if (typeStatistikkValg == 3){
+  //          muligNarkotikaMisbruk();
+  //      }
+  // }
+  // private static int totaltVanedannendeResepter(){
+  //     int teller = 0;
+  //     for (Resept r : nyttSystem.hentReseptListe()){
+  //         for (Legemiddel m : Resept r){
+  //             if (m instanceof Vanedannende){
+  //                 teller++;
+  //             }
+  //         }
+  //     }
+  //     return teller;
+  // }
+  // private static int totaltNarkotiskeResepter(){
+  //
+  // }
+  // private static int muligNarkotikaMisbruk(){
+  //
+  // }
 
-  }
+
+
+
   // METODE FOR Å SKRIVE TIL FIL:
   private static void skrivTilFil(){;  //Metode for innvalg 5 - DELOPPGAVE E8
 
